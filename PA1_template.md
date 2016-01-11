@@ -104,7 +104,7 @@ filter(summaryInterval, steps == max(steps))
 
 ## Imputing missing values.
 
-#### 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with  NA s)
+#### 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with  NA s).
 
 
 ```r
@@ -121,7 +121,7 @@ table(complete.cases(activity))
 
 #### 2. Devise a strategy for filling in all of the missing values in the dataset.
 
-##### Use the mean value for the missing items.
+#####  Update the missing values with the mean value.
 
 ```r
 meanStep <- mean(activity$steps,na.rm = TRUE)
