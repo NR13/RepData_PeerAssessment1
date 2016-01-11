@@ -9,7 +9,7 @@ library(ggplot2)
 library(lattice)
 ```
 
-## Loading and preprocessing the data
+## Loading and preprocessing the data.
 
 ```r
 if(!file.exists("activity.csv")){unzip("activity.zip")}
@@ -18,31 +18,34 @@ activity <- read.csv("activity.csv", stringsAsFactors = FALSE)
 
 ## What is mean total number of steps taken per day?
 
-#### 1. Transform date from character to date format and get total steps per day
+#### 1. Transform date from character to date format and get total steps per day.
 
 ```r
-summaryActivity <- activity %>% transform(date = ymd(date)) %>% group_by(date) %>% summarise(steps = sum(steps, na.rm = TRUE))
+summaryActivity <- activity %>% transform(date = ymd(date)) %>% 
+    group_by(date) %>% summarise(steps = sum(steps, na.rm = TRUE))
 ```
 
-#### 2. Make a histogram of the total number of steps taken each day 
+#### 2. Make a histogram of the total number of steps taken each day. 
 
 
 ```r
-hist(summaryActivity$steps, col = "green", main = "Histogram of total daily steps",
+hist(summaryActivity$steps, col = "green", 
+     main = "Histogram of total daily steps",
      xlab = "Steps", breaks = 10)
      
 abline(v = mean(summaryActivity$steps), lwd = 2, lty = 1, col = "purple")
 
 abline(v = median(summaryActivity$steps), lwd = 2, lty = 1, col = "blue")
 
-legend(x= 13000, y= 16, lwd = 2, lty = 1, col = c("purple","blue"), legend = c("Mean", "Median"), bty="n", y.intersp = .5)
+legend(x= 13000, y= 16, lwd = 2, lty = 1, col = c("purple","blue"), 
+       legend = c("Mean", "Median"), bty="n", y.intersp = .5)
 ```
 
 ![](Figs/unnamed-chunk-4-1.png) 
 
-#### 3. Report the mean and median of the total number of steps taken per day
+#### 3. Report the mean and median of the total number of steps taken per day.
 
-##### Mean
+##### Mean:
 
 ```r
 mean(summaryActivity$steps)
@@ -52,7 +55,7 @@ mean(summaryActivity$steps)
 ## [1] 9354.23
 ```
 
-##### Median
+##### Median:
 
 ```r
 median(summaryActivity$steps)
@@ -64,7 +67,7 @@ median(summaryActivity$steps)
 
 ## What is the average daily activity pattern?
 
-#### 1. Transform date from character to date format and get average steps
+#### 1. Transform date from character to date format and get average steps.
 
 ```r
 summaryInterval <- activity %>% transform(date = ymd(date)) %>% 
@@ -72,7 +75,7 @@ summaryInterval <- activity %>% transform(date = ymd(date)) %>%
 ```
     
     
-#### 2. Make a time series plot
+#### 2. Make a time series plot.
 
 ```r
 with(summaryInterval, plot(interval, steps, type = "l", col = "blue", lwd = 2,
@@ -99,7 +102,7 @@ filter(summaryInterval, steps == max(steps))
 ## 1      835 206.1698
 ```
 
-## Imputing missing values
+## Imputing missing values.
 
 #### 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with  NA s)
 
@@ -114,15 +117,16 @@ table(complete.cases(activity))
 ##  2304 15264
 ```
 
-##### Number of missing values are the FALSE count
+##### The FALSE count indicates the total number of missing values.
 
 #### 2. Devise a strategy for filling in all of the missing values in the dataset.
+
+##### Use the mean value for the missing items.
 
 ```r
 meanStep <- mean(activity$steps,na.rm = TRUE)
 ```
 
-##### Use the mean value for the missing items 
 
 #### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
@@ -132,24 +136,30 @@ activityNew <- activity
 activityNew$steps[is.na(activityNew$steps)] <- meanStep
 ```
 
-#### 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day
+#### 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
 
 ```r
-summaryActivityNew <- activityNew %>% transform(date = ymd(date)) %>% group_by(date) %>% summarise(steps = sum(steps, na.rm = TRUE))
+summaryActivityNew <- activityNew %>% transform(date = ymd(date)) %>% 
+    group_by(date) %>% summarise(steps = sum(steps, na.rm = TRUE))
 
-hist(summaryActivityNew$steps, col = "green", main = "Histogram of total daily steps",
+hist(summaryActivityNew$steps, col = "green", 
+     main = "Histogram of total daily steps",
      xlab = "Steps", breaks = 10)
      
-abline(v = mean(summaryActivityNew$steps), lwd = 2, lty = 1, col = "purple")
+abline(v = mean(summaryActivityNew$steps), 
+       lwd = 2, lty = 1, col = "purple")
 
-abline(v = median(summaryActivityNew$steps), lwd = 2, lty = 1, col = "blue")
+abline(v = median(summaryActivityNew$steps), 
+       lwd = 2, lty = 1, col = "blue")
 
-legend(x= 13000, y= 16, lwd = 2, lty = 1, col = c("purple","blue"), legend = c("Mean", "Median"), bty="n", y.intersp = .5)
+legend(x= 13000, y= 16, lwd = 2, lty = 1, 
+       col = c("purple","blue"), 
+       legend = c("Mean", "Median"), bty="n", y.intersp = .5)
 ```
 
 ![](Figs/unnamed-chunk-13-1.png) 
 
-##### Mean
+##### Mean:
 
 ```r
 mean(summaryActivityNew$steps)
@@ -159,7 +169,7 @@ mean(summaryActivityNew$steps)
 ## [1] 10766.19
 ```
 
-##### Median
+##### Median:
 
 ```r
 median(summaryActivityNew$steps)
@@ -169,27 +179,29 @@ median(summaryActivityNew$steps)
 ## [1] 10766.19
 ```
 
-##### There is an increase in Mean and Median
+##### There is an increase in Mean and Median and they converge to the same value.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-#### 1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend"
-
+#### 1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend".
 
 
 ```r
-activity$day <- ifelse(as.POSIXlt(activity$date)$wday %in% c(0,6), "weekend", "weekday")
+activity$day <- ifelse(as.POSIXlt(activity$date)$wday %in% 
+                           c(0,6), "weekend", "weekday")
 
-activity <- transform(activity, day = factor(day, labels = list("weekday", "weekend")))
+activity <- transform(activity, 
+                      day = factor(day, labels = list("weekday", "weekend")))
 ```
 
-#### 2. Make a panel plot containing a time series plot 
+#### 2. Make a panel plot containing a time series plot. 
 
 
 ```r
 SumActivity <- activity %>% transform(date = ymd(date)) %>% 
      group_by(interval, day) %>% summarise(steps = mean(steps, na.rm = TRUE))
-qplot(interval, steps, data = SumActivity, geom = "line", facets = day~.)
+qplot(interval, steps, data = SumActivity, geom = "line", facets = day~., 
+      main = "Average Number of Steps taken over a day at 5-minute interval")
 ```
 
 ![](Figs/unnamed-chunk-17-1.png) 
